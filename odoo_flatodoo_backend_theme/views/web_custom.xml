@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:-->
+<openerp>
+    <data>
+        <template id="assets_backend" name="web_custom assets" inherit_id="web.assets_backend">
+            <xpath expr="//link[@href='/web/static/src/css/base.css']" position="replace"/>
+            <xpath expr="." position="inside">
+                <link href="/web/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/res.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/style.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/bootstrap.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/font-awesome.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/im_chat.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/im_common.css" />
+                <link rel="stylesheet" href="/odoo_flatodoo_backend_theme/static/src/css/web_fullcalendar.css" />
+                <script type="text/javascript" src="/odoo_flatodoo_backend_theme/static/src/js/script.js" />
+                <script type="text/javascript" src="/odoo_flatodoo_backend_theme/static/src/js/shoppe_widget.js" />
+                <script type="text/javascript" src="/odoo_flatodoo_backend_theme/static/src/js/fullcalendar.js" />
+            </xpath>
+        </template>
+
+        <template id="web.menu">
+            <div class="navbar-collapse" id="oe_main_menu_placeholder">
+                <div class="default-logo">
+                    <a class="oe_logo" t-att-href="'/web/?debug' if debug else '/web'">
+                        <span class="oe_logo_edit">Edit Company data</span>
+                        <img src='/web/binary/company_logo'/>
+                    </a>
+                </div>
+                <div class="menu-toogle"/>
+                <ul class="nav navbar-nav navbar-right oe_user_menu_placeholder" style="display: none;"/>
+                <ul class="nav navbar-nav oe_systray oe_user_left_menu"/>
+                <ul class="nav navbar-nav clock_time">
+                    <li>
+                        <div><span id="date_time"/></div>
+                    </li>
+                </ul>
+            </div>
+        </template>
+
+        <template id="web.menu_link">
+            <t t-set="debug_param" t-value="'?&amp;debug=' if debug else ''"/>
+            <a t-att-href="'/web%s#menu_id=%s&amp;action=%s' % (debug_param, menu['id'], menu['action'] and menu['action'].split(',')[1] or '')"
+                t-att-class="'oe_menu_toggler' if menu.get('children') else 'oe_menu_leaf'"
+                t-att-data-menu="menu['id']"
+                t-att-data-action-model="menu['action'] and menu['action'].split(',')[0] or ''"
+                t-att-data-action-id="menu['action'] and menu['action'].split(',')[1] or ''">
+                <span class="oe_menu_text">
+                    <t t-esc="menu['name']"/>
+                </span>
+            </a>
+        </template>
+
+        <template id="web.menu_secondary_submenu">
+            <ul t-if="menu['children']" class="oe_secondary_submenu nav nav-pills nav-stacked">
+                <li t-foreach="menu['children']" t-as="menu">
+                    <t t-call="web.menu_link"/>
+                    <t t-call="web.menu_secondary_submenu"/>
+                </li>
+            </ul>
+        </template>
+        <template id="web.menu_secondary">
+            <div>
+                <div>
+                    <div class="oe_secondary_menus_container">
+                        <div t-foreach="menu_data['children']" t-as="menu" class="cssmenu">
+                            <h3 class="menu_heading" t-att-title="menu['name']">
+                                <i t-if="menu['name'] in ['Messaging']" class="fa fa-envelope-o"></i>
+                                <i t-if="menu['name'] in ['Sales']" class="fa fa-signal"></i>
+                                <i t-if="menu['name'] in ['Accounting']" class="fa fa-file-text-o"></i>
+                                <i t-if="menu['name'] in ['Manufacturing']" class="fa fa-cart-plus"></i>
+                                <i t-if="menu['name'] in ['Project']" class="fa fa-building-o"></i>
+                                <i t-if="menu['name'] in ['Purchases']" class="fa fa-shopping-basket"></i>
+                                <i t-if="menu['name'] in ['Website']" class="fa fa-globe"></i>
+                                <i t-if="menu['name'] in ['Warehouse']" class="fa fa-cube"></i>
+                                <i t-if="menu['name'] in ['Marketing']" class="fa fa-file-text"></i>
+                                <i t-if="menu['name'] in ['Human Resources']" class="fa fa-user"></i>
+                                <i t-if="menu['name'] in ['Knowledge']" class="fa fa-file-text"></i>
+                                <i t-if="menu['name'] in ['Reporting']" class="fa fa-area-chart"></i>
+                                <i t-if="menu['name'] in ['Settings']" class="fa fa-cog"></i>
+                                <span class="menu_title"><t t-esc="menu['name']"/></span>
+                            </h3>
+                            <div style="display: none" class="oe_secondary_menu" t-att-data-menu-parent="menu['id']">
+                                <h3 class="side_menu_heading" t-att-title="menu['name']">
+                                  <span><t t-esc="menu['name']"/></span>
+                                </h3>
+                                <t t-foreach="menu['children']" t-as="menu">
+                                    <div class="oe_secondary_menu_section">
+                                        <t t-esc="menu['name']"/>
+                                    </div>
+                                    <t t-call="web.menu_secondary_submenu"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="oe_footer">
+                Powered by <a href="http://www.odoo.com" target="_blank"><span>Odoo</span></a>
+            </div>
+        </template>
+
+        <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap" name="Webclient Bootstrap">
+            <xpath expr="//t[@t-call='web.layout']" position="replace">
+                <t t-call="web.layout">
+                    <t t-set="head">
+                        <t t-call-assets="web.assets_common" />
+                        <t t-call-assets="web.assets_backend" /> &lt;!--[if lte IE 9]&gt;
+                        <link rel="stylesheet" href="/web/static/src/css/ie.css" /> &lt;![endif]--&gt;
+                        <script type="text/javascript">
+                            $(function() {
+                                var s = new openerp.init();
+                                <t t-if="init">
+                                    <t t-raw="init"/>
+                                </t>
+                                <t t-if="not init">
+                                    var wc = new s.web.WebClient();
+                                    wc.setElement($(document.body));
+                                    wc.start();
+                                </t>
+                            });
+                        </script>
+                    </t>
+                    <nav id="oe_main_menu_navbar" class="navbar navbar-inverse" role="navigation" groups="base.group_user,base.group_portal">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="navbar-collapse collapse" id="oe_main_menu_placeholder">
+                            <t t-call="web.menu" />
+                        </div>
+                    </nav>
+                    <div class="openerp openerp_webclient_container">
+                        <table class="oe_webclient">
+                            <tr>
+                                <td class="oe_leftbar" valign="top">
+                                    <div groups="base.group_user,base.group_portal">
+                                        <t t-call="web.menu_secondary" />
+                                    </div>
+                                </td>
+                                <td class="oe_application" />
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>

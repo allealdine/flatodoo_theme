@@ -1,0 +1,74 @@
+.src_filter .dl-horizontal {
+    width: 50%;
+    float: left;
+}
+
+.dl-horizontal dt {
+    width: 80px !important;
+}
+
+.dl-horizontal dd {
+    margin-left: 90px;
+}
+
+@media (max-width: 1100px) {
+    ul.clock_time {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .navbar .oe_topbar_name {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-header {
+        display: none;
+    }
+    ul.oe_user_left_menu {
+        display: none !important;
+    }
+    ul.oe_user_menu_placeholder.navbar-nav.navbar-right:last-child {
+        margin-right: -15px;
+    }
+    .navbar-right {
+        float: right !important;
+    }
+    ul.oe_user_menu_placeholder {
+        margin: 0 !important;
+    }
+    ul.oe_user_menu_placeholder > li {
+        float: left !important;
+    }
+    .src_filter {
+        max-width: 70%;
+    }
+    .src_filter .dl-horizontal {
+        width: 100%;
+        float: left;
+    }
+    .dl-horizontal dt {
+        width: 160px;
+    }
+    .dl-horizontal dd {
+        margin-left: 180px;
+    }
+}
+
+@media (max-width: 560px) {
+    #oe_main_menu_navbar .default-logo {
+        width: 150px;
+    }
+    .openerp .oe_searchview {
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 400px) {
+    .oe_user_menu_placeholder li:first-child,
+    .oe_user_menu_placeholder li:nth-child(2) {
+        display: none;
+    }
+}
